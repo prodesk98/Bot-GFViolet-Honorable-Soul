@@ -1,6 +1,6 @@
 from enum import Enum
 
-import pyautogui
+import pydirectinput
 
 
 class BUTTON(Enum):
@@ -19,17 +19,11 @@ class PyAutoGUI:
     @staticmethod
     def mouseClick(coords: tuple[int, int], clicks: int = 1, interval: float = 0.0, button: BUTTON = BUTTON.LEFT):
         x, y = coords
-        pyautogui.click(
-            x=x,
-            y=y,
-            clicks=clicks,
-            interval=interval,
-            button=button.value,
-        )
+        pydirectinput.click()
 
     @staticmethod
     def press(keys: list[str]):
-        pyautogui.keyDown(
+        pydirectinput.keyDown(
             key=keys[0]
         )
 
@@ -37,14 +31,11 @@ class PyAutoGUI:
 if __name__ == "__main__":
     auto = PyAutoGUI()
     auto.mouseClick(
-        (200, 200),
-        button=BUTTON.RIGHT,
-        interval=2.0,
-        clicks=5,
+        (10, 20),
     )
-    auto.press(
-        [
-            'enter',
-            'w',
-        ] * 45
+    auto.mouseClick(
+        (10, 20),
+    )
+    auto.mouseClick(
+        (10, 20),
     )

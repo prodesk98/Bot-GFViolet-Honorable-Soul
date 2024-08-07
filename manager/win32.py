@@ -1,10 +1,13 @@
 from os import PathLike
 
-import win32gui # noqa
-import win32con # noqa
-import win32api # noqa
+import win32gui  # noqa
+import win32con  # noqa
+import win32api  # noqa
 from PIL import ImageGrab
 from loguru import logger
+
+RELATIVE_X = 0.5
+RELATIVE_Y = 0.5
 
 
 class Win32:
@@ -15,6 +18,14 @@ class Win32:
             raise Exception(
                 "Unable to locate window"
             )
+
+    def get_region(self) -> tuple[int, int, int, int]:
+        """
+        with, height, left, top
+        :return:
+        """
+        rect = self.get_window_rect()
+        return rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]
 
     def get_window_size(self) -> tuple[int, int]:
         """
@@ -52,23 +63,43 @@ class Win32:
         screenshot.save(save_path)
         logger.info(f"screenshot saved to {save_path}")
 
-    def centralize_window(self) -> None:
-        screen_width = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)
-        screen_height = win32api.GetSystemMetrics(win32con.SM_CYSCREEN)
+    @staticmethod
+    def get_winfo_screen() -> tuple[int, int]:
+        width = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)  # noqa
+        height = win32api.GetSystemMetrics(win32con.SM_CYSCREEN)  # noqa
+        return width, height
 
+    def get_center_window(self) -> tuple[int, int, int, int]:
+        """
+        :return: x, y, width, height
+        """
+        screen_width, screen_height = self.get_winfo_screen()
         window_width, window_height = self.get_window_size()
 
-        new_x = (screen_width - window_width) // 2
-        new_y = (screen_height - window_height) // 2
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+
+        return x, y, window_width, window_height
+
+    def centralize_window(self) -> None:
+        x, y, screen_width, screen_height = self.get_center_window()
 
         win32gui.MoveWindow(
             self._hwnd,
-            new_x,
-            new_y,
-            window_width,
-            window_height,
+            x,
+            y,
+            screen_width,
+            screen_height,
             True
         )
+
+    def calculate_relative_position(self):
+        window_x, window_y, window_width, window_height = self.get_center_window()
+
+        mouse_x = window_x + int(RELATIVE_X * window_width)
+        mouse_y = window_y + int(RELATIVE_Y * window_height)
+
+        return mouse_x, mouse_y
 
 
 if __name__ == "__main__":

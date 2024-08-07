@@ -1,5 +1,5 @@
-train: /opt/ml/train
-val: /opt/ml/val
+train: /mnt/c/Users/prode/PycharmProjects/Bot-GFViolet-Honorable-Soul/train/images
+val: /mnt/c/Users/prode/PycharmProjects/Bot-GFViolet-Honorable-Soul/train/evals/images
 
 nc: 11
 names: [

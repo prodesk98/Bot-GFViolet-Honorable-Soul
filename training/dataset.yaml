@@ -1,0 +1,17 @@
+train: /mnt/c/Users/prode/PycharmProjects/Bot-GFViolet-Honorable-Soul/training/train/images
+val: /mnt/c/Users/prode/PycharmProjects/Bot-GFViolet-Honorable-Soul/training/valid/images
+test: /mnt/c/Users/prode/PycharmProjects/Bot-GFViolet-Honorable-Soul/training/test/images
+
+
+nc: 9
+names: [
+  'mob_ant',
+  'mob_anthill',
+  'mob_bird',
+  'mob_column',
+  'mob_garra',
+  'mob_mermaid',
+  'mob_tower',
+  'obj_portal',
+  'obj_stone_red',
+]

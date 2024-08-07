@@ -1,0 +1,17 @@
+train: /opt/ml/train
+val: /opt/ml/val
+
+nc: 11
+names: [
+  'obj_stone_green',
+  'obj_stone_red',
+  'obj_tombstone',
+  'obj_portal',
+  'mob_garra',
+  'mob_mermaid',
+  'mob_bird',
+  'mob_tower',
+  'mob_column',
+  'mob_ant',
+  'mob_anthill',
+]

@@ -77,4 +77,4 @@ logger.success(
     "F3: Display bot vision\n"
     "F4: Mouse position"
 )
-keyboard.wait('esc')
+keyboard.wait()

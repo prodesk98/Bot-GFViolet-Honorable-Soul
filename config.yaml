@@ -3,13 +3,19 @@ stages:
     - action: mouseClick
       button: right
       delay: 1.2
-      x: 594
-      y: 325
+      repeat: 3
+      x: 947
+      y: 424
     - action: mouseClick
       button: left
+      delay: 1.2
+      repeat: 1
+      x: 926
+      y: 575
+    - action: mouseMove
       delay: 0.8
-      x: 591
-      y: 944
+      x: 500
+      y: 500
     - action: uiClick
       button: ok
       delay: 0.7

@@ -27,7 +27,10 @@ class Win32:
         :return:
         """
         rect = self.get_window_rect()
-        return rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]
+        titlebar_pixels = 26
+        w = rect[0]
+        h = rect[1] + titlebar_pixels
+        return w, h, rect[2] - w, rect[3] - h - titlebar_pixels
 
     def get_window_size(self) -> tuple[int, int]:
         """

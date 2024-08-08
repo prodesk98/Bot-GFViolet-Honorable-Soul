@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import keyboard
 from loguru import logger
 
@@ -31,6 +33,10 @@ def _call_bot():
         bot.start()
     except Exception as err:
         logger.error(err)
+
+
+def _call_screenshot():
+    GFWindow.capture_window(f"screenshot/{str(uuid4())}.jpg")
 
 
 def _call_center_window():
@@ -69,12 +75,17 @@ keyboard.add_hotkey(
     "F4",
     _call_mouse_position,
 )
+keyboard.add_hotkey(
+    "F5",
+    _call_screenshot,
+)
 
 logger.success(
     "Setup started... Waiting commands:\n\n"
     "F1: Start bot\n"
     "F2: Center screen\n"
     "F3: Display bot vision\n"
-    "F4: Mouse position"
+    "F4: Mouse position\n"
+    "F5: Screenshot"
 )
 keyboard.wait()

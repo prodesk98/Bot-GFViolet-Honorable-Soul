@@ -1,9 +1,0 @@
-mob_ant
-mob_anthill
-mob_bird
-mob_column
-mob_garra
-mob_mermaid
-mob_tower
-obj_portal
-obj_stone_red

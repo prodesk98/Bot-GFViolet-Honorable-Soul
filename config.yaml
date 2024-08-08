@@ -1,11 +1,7 @@
 stages:
   - start:
-    - action: mouseClick
-      button: right
-      delay: 1.2
-      repeat: 3
-      x: 947
-      y: 424
+    - action: lookObject
+      name: obj_stone_green
     - action: mouseClick
       button: left
       delay: 1.2

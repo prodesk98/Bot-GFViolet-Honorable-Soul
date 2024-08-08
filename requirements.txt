@@ -9,7 +9,6 @@ PyScreeze~=0.1.30
 pytweening~=1.2.0
 PyGetWindow~=0.0.9
 PyRect~=0.2.0
-ReadWriteMemory~=0.1.5
 loguru~=0.7.2
 pywin32==306
 typing_extensions~=4.12.2
@@ -18,6 +17,7 @@ pydantic~=2.8.2
 pydantic_core~=2.20.1
 keyboard~=0.13.5
 opencv-python~=4.10.0.84
+pymem~=1.13.1
 
 # external libraries
 ./libs/GFAutoLib-0.1.0-cp312-none-win_amd64.whl

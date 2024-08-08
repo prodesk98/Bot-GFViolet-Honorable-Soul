@@ -1,5 +1,7 @@
 from os import PathLike
+from time import sleep
 
+import pyautogui
 import win32gui  # noqa
 import win32con  # noqa
 import win32api  # noqa
@@ -93,15 +95,14 @@ class Win32:
             True
         )
 
-    def calculate_relative_position(self):
-        window_x, window_y, window_width, window_height = self.get_center_window()
-
-        mouse_x = window_x + int(RELATIVE_X * window_width)
-        mouse_y = window_y + int(RELATIVE_Y * window_height)
-
-        return mouse_x, mouse_y
+    @staticmethod
+    def get_mouse_position() -> tuple[int, int]:
+        """
+        :return: x, y
+        """
+        pos_x, pos_y = pyautogui.position()
+        return pos_x, pos_y
 
 
 if __name__ == "__main__":
-    win32 = Win32('Grand Fantasia Violet')
-    print(win32.centralize_window())
+    ...

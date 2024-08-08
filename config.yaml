@@ -1,0 +1,15 @@
+stages:
+  - start:
+    - action: mouseClick
+      button: right
+      delay: 1.2
+      x: 594
+      y: 325
+    - action: mouseClick
+      button: left
+      delay: 0.8
+      x: 591
+      y: 944
+    - action: uiClick
+      button: ok
+      delay: 0.7

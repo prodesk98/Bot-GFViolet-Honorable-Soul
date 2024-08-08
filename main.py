@@ -1,9 +1,7 @@
-from hashlib import md5
-from uuid import uuid4
-
 import keyboard
 from loguru import logger
 
+from core.bot import Bot
 from detect import Detect
 from manager import (
     ComputerVision,
@@ -20,47 +18,44 @@ GFWindow = Win32(
 )
 
 
-def _call_automations():
+def _call_bot():
     logger.info(
-        "Automations starting..."
+        "Bot starting..."
     )
-    coords_window = GFWindow.get_window_position_center()
-    auto_controls.mouseMove(coords_window)
-    auto_controls.mouseClick_Left(coords_window)
-    sleep(1.2)
-    coords_object = computer_vision.locateCenter(
-        "images/btn_ok.png"
-    )
-    if coords_object is None:
-        logger.error(
-            "Object not found in scene"
+    GFWindow.centralize_window()
+    try:
+        bot = Bot(
+            settings.config,
+            stage="start"
         )
-        return
-    auto_controls.mouseClick_Left(coords_object)
+        bot.start()
+    except Exception as err:
+        logger.error(err)
 
-
-# def _call_screenshot():
-#     settings.MOD_CAPTURE_WINDOW = not settings.MOD_CAPTURE_WINDOW
-#     count: int = 0
-#     while settings.MOD_CAPTURE_WINDOW is True:
-#         filename = f"screenshot/{count}_{md5(uuid4().bytes).hexdigest()[:8]}.jpg"
-#         GFWindow.capture_window(filename)
-#         sleep(0.7)
-#         count += 1
 
 def _call_center_window():
     GFWindow.centralize_window()
 
 
+def _call_mouse_position():
+    while True:
+        pos_x, pos_y = GFWindow.get_mouse_position()
+        logger.debug("Mouse Position: %i, %i" % (pos_x, pos_y))
+        sleep(.6)
+
+
 def _call_show_display():
-    region = GFWindow.get_region()
-    cv = Detect(region)
-    cv.display()
+    try:
+        region = GFWindow.get_region()
+        cv = Detect(region)
+        cv.display()
+    except Exception as err:
+        logger.error(err)
 
 
 keyboard.add_hotkey(
     "F1",
-    _call_automations,
+    _call_bot,
 )
 keyboard.add_hotkey(
     "F2",
@@ -70,11 +65,16 @@ keyboard.add_hotkey(
     "F3",
     _call_show_display,
 )
+keyboard.add_hotkey(
+    "F4",
+    _call_mouse_position,
+)
 
 logger.success(
     "Setup started... Waiting commands:\n\n"
     "F1: Start bot\n"
-    "F3: Center screen\n"
-    "F2: Display bot vision"
+    "F2: Center screen\n"
+    "F3: Display bot vision\n"
+    "F4: Mouse position"
 )
 keyboard.wait('esc')

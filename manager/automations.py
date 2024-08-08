@@ -19,10 +19,4 @@ class AutoControls:
 
 
 if __name__ == "__main__":
-    auto = AutoControls()
-    auto.mouseClick_Left(
-        (1016, 654),
-    )
-    auto.mouseClick_Left(
-        (1016, 654),
-    )
+    ...

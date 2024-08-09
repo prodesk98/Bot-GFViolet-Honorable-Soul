@@ -1,7 +1,9 @@
+import math
+from time import sleep
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
-from manager import MemoryRead
+from manager import MemoryRead, AutoControls
 from pydantic import BaseModel
 import yaml
 
@@ -11,9 +13,9 @@ mr = MemoryRead(
 
 
 class Position(BaseModel):
-    x: float
-    y: float
-    rx: float
+    x: Optional[float] = 0.0
+    y: Optional[float] = 0.0
+    angle: Optional[float] = 0.0
 
 
 class MemoryConfig(BaseModel):
@@ -107,20 +109,27 @@ class Player:
         memory = self._get_memory_config('pos_y')
         return self._read_memory(memory)
 
-    def _rot_x(self) -> float:
-        memory = self._get_memory_config('rot_x')
+    def angle(self) -> float:
+        memory = self._get_memory_config('angle')
         return self._read_memory(memory)
 
     def get_position(self) -> Position:
         _pos_x = self._pos_x()
         _pos_y = self._pos_y()
-        _rot_x = self._rot_x()
+        _angle = self.angle()
+
+        if (
+            _pos_x is None or
+            _pos_y is None or
+            _angle is None
+        ):
+            raise Exception("Invalid local player position.")
 
         return Position(
             **{
                 "x": _pos_x,
                 "y": _pos_y,
-                "rx": _rot_x,
+                "angle": _angle,
             }
         )
 
@@ -134,5 +143,48 @@ Player:
     - position:
         - x: {self.position.x}
         - y: {self.position.y}
-        - rx: {self.position.rx}
+        - angle: {self.position.angle}
     - target: {self.target}"""
+
+
+class PlayerControl:
+    def __init__(self, auto_controls: AutoControls):
+        self.control = auto_controls
+        self.current_angle = .0
+
+    @staticmethod
+    def calculate_rotation(player_x: float, player_y: float, target_x: float, target_y: float) -> float:
+        delta_x = target_x - player_x
+        delta_y = target_y - player_y
+
+        angle_rad = math.atan2(delta_y, delta_x)
+        angle_deg = math.degrees(angle_rad)
+
+        final_angle = (angle_deg + 360) % 360
+        return final_angle
+
+    @staticmethod
+    def convert_to_normalized_direction(angle: float) -> float:
+        if angle <= 180:
+            return angle / 180
+        else:
+            return (angle - 360) / 180
+
+    def rotate_player(self, desired_angle: float):
+        while abs(desired_angle - self.current_angle) > .01:
+            normalized_direction = self.convert_to_normalized_direction(desired_angle - self.current_angle)
+
+            if normalized_direction < 0:
+                self.control.keyPress('a')
+            else:
+                self.control.keyPress('d')
+
+            self.current_angle = max(-1, min(1, self.current_angle))
+            sleep(.01)
+
+    def move_to_point(self, player_x: float, player_y: float, target_x: float, target_y: float, desired_angle: float):
+        while math.hypot(target_x - player_x, target_y - player_y) > 5:
+            self.control.keyPress('w')
+            player_x += math.cos(math.radians(self.current_angle * 180))
+            player_y += math.sin(math.radians(self.current_angle * 180))
+            sleep(.01)

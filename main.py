@@ -1,15 +1,12 @@
-from uuid import uuid4
-
-import keyboard
 from loguru import logger
-
 from core.bot import Bot
-from detect import Detect
+from gui import GUI
 from manager import (
     ComputerVision,
     AutoControls,
     Win32,
 )
+from core import Player
 from controller import settings
 
 computer_vision = ComputerVision()
@@ -17,6 +14,7 @@ auto_controls = AutoControls()
 GFWindow = Win32(
     "Grand Fantasia Violet"
 )
+player = Player()
 
 
 def _call_bot():
@@ -27,62 +25,15 @@ def _call_bot():
     try:
         bot = Bot(
             settings.config,
-            stage="start"
+            stage="open_quest"
         )
         bot.start()
     except Exception as err:
         logger.error(err)
 
 
-def _call_screenshot():
-    GFWindow.capture_window(f"screenshot/{str(uuid4())}.jpg")
-
-
-def _call_center_window():
-    GFWindow.centralize_window()
-
-
-def _call_mouse_position():
-    pos_x, pos_y = GFWindow.get_mouse_position()
-    logger.debug("Mouse Position: %i, %i" % (pos_x, pos_y))
-
-
-def _call_show_display():
-    try:
-        region = GFWindow.get_region()
-        cv = Detect(region)
-        cv.display()
-    except Exception as err:
-        logger.error(err)
-
-
-keyboard.add_hotkey(
-    "F1",
-    _call_bot,
-)
-keyboard.add_hotkey(
-    "F2",
-    _call_center_window,
-)
-keyboard.add_hotkey(
-    "F3",
-    _call_show_display,
-)
-keyboard.add_hotkey(
-    "F4",
-    _call_mouse_position,
-)
-keyboard.add_hotkey(
-    "F5",
-    _call_screenshot,
-)
-
-logger.success(
-    "Setup started... Waiting commands:\n\n"
-    "F1: Start bot\n"
-    "F2: Center screen\n"
-    "F3: Display bot vision\n"
-    "F4: Mouse position\n"
-    "F5: Screenshot"
-)
-keyboard.wait()
+if __name__ == "__main__":
+    panel = GUI(title="GF Violet Bot")
+    panel.add_label(str(player))
+    panel.add_button("start", _call_bot)
+    panel.window.mainloop()

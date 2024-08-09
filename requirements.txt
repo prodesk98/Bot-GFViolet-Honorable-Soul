@@ -19,6 +19,7 @@ keyboard~=0.13.5
 opencv-python~=4.10.0.84
 pymem~=1.13.1
 PyDirectInput~=1.0.4
+pyinstaller~=6.9.0
 
 # external libraries
 ./libs/GFAutoLib-0.1.0-cp312-none-win_amd64.whl

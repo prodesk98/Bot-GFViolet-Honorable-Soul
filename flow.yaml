@@ -24,3 +24,12 @@ stages:
       button: ok
       delay: 0.7
       confidence: .85
+  - open_quest:
+    - action: uiClick
+      button: quest_book
+      delay: 0.7
+      confidence: .85
+    - action: uiClick
+      button: ok
+      delay: 0.5
+      confidence: .95

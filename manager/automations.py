@@ -1,4 +1,7 @@
+from time import sleep
+
 import gf_auto
+import pydirectinput
 
 
 class AutoControls:
@@ -18,8 +21,10 @@ class AutoControls:
         gf_auto.mouse_move(x, y)  # noqa
 
     @staticmethod
-    def keyPress(key: str, time: int = 60):
-        gf_auto.key_press(key, time)  # noqa
+    def keyPress(key: str, time: float = .6):
+        pydirectinput.keyDown(key)
+        sleep(time)
+        pydirectinput.keyUp(key)
 
 
 if __name__ == "__main__":

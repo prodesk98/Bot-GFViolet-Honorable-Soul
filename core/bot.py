@@ -41,7 +41,6 @@ class Bot:
                 f"{Path(__file__).parent.parent}/images/ui/{button}.png",
                 confidence=confidence,
             )
-            logger.error(coords)
             if coords is not None:
                 break
             attempts += 1
@@ -63,7 +62,7 @@ class Bot:
         logger.debug(f"move -> x:{x}, y:{y}")
         logger.debug(f"Waiting {wait}seg...")
         sleep(wait)
-        controls.mouseClick_Left(coords)
+        controls.mouseClick_Right(coords)
         logger.debug(f"click({button}) -> x:{x}, y:{y}")
 
     @staticmethod

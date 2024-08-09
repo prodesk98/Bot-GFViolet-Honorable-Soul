@@ -31,14 +31,17 @@ class Bot:
     def _ui_click(**kwargs):
         button = kwargs.get('button')
         delay = kwargs.get('delay', .0)
+        confidence = kwargs.get('confidence', 0.95)
         logger.debug(f"Waiting {delay * 2}seg...")
         sleep(delay * 2)
         coords = None
         attempts = 0
         while coords is None:
             coords = computer_vision.locateCenter(
-                f"{Path(__file__).parent.parent}/images/ui/{button}.png"
+                f"{Path(__file__).parent.parent}/images/ui/{button}.png",
+                confidence=confidence,
             )
+            logger.error(coords)
             if coords is not None:
                 break
             attempts += 1
@@ -85,7 +88,7 @@ class Bot:
             logger.debug(f"Waiting {wait}seg...")
             sleep(wait)
             for rep in range(repeat):
-                controls.mouseClick_Right(coords)
+                controls.mouseClick_Right(coords, 120)
                 sleep(delay / 2)
                 logger.debug(
                     f"[{rep + 1}] clicked({button}) -> x:{x}, y:{y}"
@@ -97,7 +100,7 @@ class Bot:
             logger.debug(f"Waiting {wait}seg...")
             sleep(wait)
             for rep in range(repeat):
-                controls.mouseClick_Left(coords)
+                controls.mouseClick_Left(coords, 120)
                 sleep(delay / 2)
                 logger.debug(
                     f"[{rep + 1}] clicked({button}) -> x:{x}, y:{y}"

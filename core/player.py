@@ -3,7 +3,6 @@ from typing import Literal
 
 from manager import MemoryRead
 from pydantic import BaseModel
-from loguru import logger
 import yaml
 
 mr = MemoryRead(
@@ -96,6 +95,9 @@ class Player:
         memory = self._get_memory_config('target')
         self.target = self._read_memory(memory)
         return self.target
+
+    def set_target(self, target: str | None = None) -> None:
+        self.target = target
 
     def _pos_x(self) -> int:
         memory = self._get_memory_config('pos_x')

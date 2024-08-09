@@ -5,7 +5,7 @@ from loguru import logger
 import yaml
 
 
-with open(f"{Path(__file__).parent.parent}/config.yaml") as f:
+with open(f"{Path(__file__).parent.parent}/flow.yaml") as f:
     cfg = yaml.safe_load(f)
 
 logger.info(cfg)

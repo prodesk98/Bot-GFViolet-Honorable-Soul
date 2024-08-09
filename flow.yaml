@@ -1,0 +1,26 @@
+stages:
+  - start:
+    - action: goPosition
+      x: 249.93
+      y: 96.37
+      rx: 0.445
+    - action: mouseClick
+      button: right
+      delay: 1.2
+      repeat: 3
+      x: 939
+      y: 350
+    - action: mouseClick
+      button: left
+      delay: 1.2
+      repeat: 1
+      x: 936
+      y: 572
+    - action: mouseMove
+      delay: 0.8
+      x: 500
+      y: 500
+    - action: uiClick
+      button: ok
+      delay: 0.7
+      confidence: .85

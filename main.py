@@ -10,7 +10,6 @@ from manager import (
     AutoControls,
     Win32,
 )
-from time import sleep
 from controller import settings
 
 computer_vision = ComputerVision()
@@ -44,10 +43,8 @@ def _call_center_window():
 
 
 def _call_mouse_position():
-    while True:
-        pos_x, pos_y = GFWindow.get_mouse_position()
-        logger.debug("Mouse Position: %i, %i" % (pos_x, pos_y))
-        sleep(.6)
+    pos_x, pos_y = GFWindow.get_mouse_position()
+    logger.debug("Mouse Position: %i, %i" % (pos_x, pos_y))
 
 
 def _call_show_display():

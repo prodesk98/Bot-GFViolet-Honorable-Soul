@@ -17,11 +17,15 @@ class Bot:
     def __init__(self, config: dict, stage: str):
         self.config = config
         self.stages: list[dict] = [s for s in config['stages']]
-        self.current_stage: list[dict] = []
+        self.current_stage: list[dict] = self.config.get(stage, [])
+        self.stages_name: list[str] = [
+            name for name in self.current_stage
+        ]
+        self.count_loop = 0
         self.set_stage(stage)
 
     def set_stage(self, stage: str) -> None:
-        self.current_stage = next(iter(d.get(stage) for d in self.stages if d.get(stage)))
+        self.current_stage = self.config.get(stage)
         logger.debug(f"Stage: {stage}")
 
     def get_current_stage(self) -> list[dict] | None:
@@ -29,7 +33,8 @@ class Bot:
 
     @staticmethod
     def _ui_click(**kwargs):
-        button = kwargs.get('button')
+        button = kwargs.get('button', 'left')
+        icon = kwargs.get('icon')
         delay = kwargs.get('delay', .0)
         confidence = kwargs.get('confidence', 0.95)
         logger.debug(f"Waiting {delay * 2}seg...")
@@ -38,7 +43,7 @@ class Bot:
         attempts = 0
         while coords is None:
             coords = computer_vision.locateCenter(
-                f"{Path(__file__).parent.parent}/images/ui/{button}.png",
+                f"{Path(__file__).parent.parent}/src/ui/{icon}.png",
                 confidence=confidence,
             )
             if coords is not None:
@@ -49,7 +54,7 @@ class Bot:
             )
             if attempts > UI_CLICK_MAX_ATTEMPTS:
                 logger.error(
-                    f"Not found UI -> {button}"
+                    f"Not found UI -> {icon}"
                 )
                 return
             sleep(.7)
@@ -62,8 +67,11 @@ class Bot:
         logger.debug(f"move -> x:{x}, y:{y}")
         logger.debug(f"Waiting {wait}seg...")
         sleep(wait)
-        controls.mouseClick_Right(coords)
-        logger.debug(f"click({button}) -> x:{x}, y:{y}")
+        if button == "left":
+            controls.mouseClick_Left(coords)
+        elif button == "right":
+            controls.mouseClick_Right(coords)
+        logger.debug(f"click({icon}) -> x:{x}, y:{y}")
 
     @staticmethod
     def _mouse_move(**kwargs):
@@ -106,6 +114,18 @@ class Bot:
                 )
             return
 
+    @staticmethod
+    def _key_press(**kwargs):
+        key: str = kwargs.get('key')
+        if not key:
+            return
+        delay = kwargs.get('delay', .6)
+        logger.debug(
+            f"KeyPress {key.upper()}... {delay} delay... Waiting 1.2seg..."
+        )
+        sleep(1.2)
+        controls.keyPress(key, delay)
+
     def start(self):
         interactions: list[dict] = self.current_stage
         for it in interactions:
@@ -124,6 +144,12 @@ class Bot:
 
             if act == 'uiClick':
                 self._ui_click(**command)
+
+            if act == 'keyPress':
+                self._key_press(**command)
+            self.count_loop += 1
+        if len(self.stages) > self.count_loop:
+            self.set_stage(self.stages[self.count_loop])
 
 
 if __name__ == "__main__":

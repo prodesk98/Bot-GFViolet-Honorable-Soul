@@ -1,1 +1,1 @@
-pyinstaller --onefile --name GFVioletBot main.py
+pyinstaller --onefile --name GFVioletBot --add-data "memory.yaml;." --add-data "flow.yaml;." --add-data "images/;images" main.py

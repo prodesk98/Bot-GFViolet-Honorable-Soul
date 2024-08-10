@@ -1,5 +1,4 @@
 from os import PathLike
-from time import sleep
 
 import pyautogui
 import win32gui  # noqa
@@ -67,6 +66,9 @@ class Win32:
         screenshot = ImageGrab.grab(bbox=rect)
         screenshot.save(save_path)
         logger.info(f"screenshot saved to {save_path}")
+
+    def activate_window(self):
+        win32gui.SetForegroundWindow(self._hwnd)
 
     @staticmethod
     def get_winfo_screen() -> tuple[int, int]:

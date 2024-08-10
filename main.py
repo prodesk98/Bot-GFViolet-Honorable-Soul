@@ -15,6 +15,7 @@ GFWindow = Win32(
     "Grand Fantasia Violet"
 )
 player = Player()
+stages = settings.config.get("stages")
 
 
 def _call_bot():
@@ -22,10 +23,11 @@ def _call_bot():
         "Bot starting..."
     )
     GFWindow.centralize_window()
+    GFWindow.activate_window()
     try:
         bot = Bot(
             settings.config,
-            stage="open_quest"
+            stage=next(iter(stages))
         )
         bot.start()
     except Exception as err:

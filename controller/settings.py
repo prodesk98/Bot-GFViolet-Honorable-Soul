@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from pydantic import BaseModel
 from loguru import logger
+from pydantic import BaseModel
 import yaml
 
 

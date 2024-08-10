@@ -18,9 +18,7 @@ class Bot:
         self.config = config
         self.stages: list[dict] = [s for s in config['stages']]
         self.current_stage: list[dict] = self.config.get(stage, [])
-        self.stages_name: list[str] = [
-            name for name in self.current_stage
-        ]
+        self.stages_names: list[str] = []
         self.count_loop = 0
         self.set_stage(stage)
 
@@ -148,8 +146,8 @@ class Bot:
             if act == 'keyPress':
                 self._key_press(**command)
             self.count_loop += 1
-        if len(self.stages) > self.count_loop:
-            self.set_stage(self.stages[self.count_loop])
+        if len(self.stages_names) > self.count_loop:
+            self.set_stage(self.stages_names[self.count_loop])
 
 
 if __name__ == "__main__":

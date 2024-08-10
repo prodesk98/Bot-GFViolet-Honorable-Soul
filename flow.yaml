@@ -45,6 +45,6 @@ accept_quest:
     delay: .6
 
 stages:
-  - accept_quest
+#  - accept_quest
   - dungeon
 
